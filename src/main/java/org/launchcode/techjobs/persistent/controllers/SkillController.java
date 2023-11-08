@@ -1,5 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 import jakarta.persistence.Index;
+import jakarta.validation.Path;
 import jakarta.validation.Valid;
 import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Skill;
@@ -10,6 +11,8 @@ import org.springframework.ui.Model;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("skills")
@@ -29,12 +32,17 @@ public class SkillController {
         model.addAttribute(new Skill());
         return "skills/add";
     }
-    @GetMapping("add")
-    public String displayViewSkill(Model model) {
-        model.addAttribute(new Employer());
-        return "employer/add";
+    @GetMapping("view/{skillId}")
+    public String displayViewSkill(Model model, @PathVariable int skillId) {
+        Optional optSkill = skillRepository.findById(skillId);
+        if (optSkill.isPresent()) {
+            Skill skill = (Skill) optSkill.get();
+            model.addAttribute("skill", skill);
+            return "skill/view";
+        } else {
+            return "redirect:../";
+        }
     }
-
     @PostMapping("add")
     public String processAddSkillForm(@ModelAttribute @Valid Skill newSkill,
                                       Errors errors, Model model) {
