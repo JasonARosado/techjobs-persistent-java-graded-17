@@ -32,9 +32,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String index(Model model) {
-        Iterable<Job>jobs= jobRepository.findAll();
-        model.addAttribute("title", "MyJobs");
-        model.addAttribute("jobs", jobs);
+        model.addAttribute("jobs", jobRepository.findAll());
 
         return "index";
     }
@@ -43,7 +41,6 @@ public class HomeController {
     public String displayAddJobForm(Model model) {
     Iterable<Employer> employers = employerRepository.findAll();
     Iterable<Skill> skills = skillRepository.findAll();
-    model.addAttribute("title", "Add Job");
         model.addAttribute(new Job());
         model.addAttribute("employers", employers);
         model.addAttribute("skills", skills);
@@ -58,11 +55,11 @@ public class HomeController {
             model.addAttribute("title", "Add Job");
             return "add";
         }
-        Optional optEmployer = employerRepository.findById(employerId);
-        optEmployer.isPresent();
-        // added to get the list function working
         Optional<Employer> optionalEmployer = employerRepository.findById(employerId);
-        optEmployer.ifPresent(newJob::setEmployer);
+        if (optionalEmployer.isPresent()) {
+            Employer employer = optionalEmployer.get();
+            newJob.setEmployer(employer);
+        }
 
         if (skills != null) {
             List<Skill> skillsResult = (List<Skill>) skillRepository.findAllById(skills);
@@ -78,7 +75,7 @@ public class HomeController {
     public String displayViewJob(Model model, @PathVariable int jobId) {
     Optional<Job> job = jobRepository.findById(jobId);
         if (job.isPresent()) {
-            model.addAttribute("job", job.get());
+            model.addAttribute("job", job);
         }
             return "view";
     }
