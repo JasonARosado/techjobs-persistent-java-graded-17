@@ -2,6 +2,7 @@ package org.launchcode.techjobs.persistent.models;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 
 import java.util.List;
@@ -11,11 +12,12 @@ public class Job extends AbstractEntity {
 
     @ManyToOne
     private Employer employer;
+
+    @ManyToMany
     private List<Skill> skills;
 
 
-    public Job() {
-    }
+    public Job() {}
 
     // Initialize the id and value fields.
     public Job(Employer employer,  List<Skill> someSkills) {
@@ -44,4 +46,6 @@ public class Job extends AbstractEntity {
         this.skills = skills;
     }
 
+    public void setEmployer(Object o) {
+    }
 }

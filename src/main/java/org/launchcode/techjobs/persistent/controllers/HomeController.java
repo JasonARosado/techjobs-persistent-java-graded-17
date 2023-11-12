@@ -60,6 +60,9 @@ public class HomeController {
         }
         Optional optEmployer = employerRepository.findById(employerId);
         optEmployer.isPresent();
+        // added to get the list function working
+        Optional<Employer> optionalEmployer = employerRepository.findById(employerId);
+        optEmployer.ifPresent(newJob::setEmployer);
 
         if (skills != null) {
             List<Skill> skillsResult = (List<Skill>) skillRepository.findAllById(skills);
