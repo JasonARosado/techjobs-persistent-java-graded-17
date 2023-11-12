@@ -16,7 +16,6 @@ public class Job extends AbstractEntity {
     @ManyToMany
     private List<Skill> skills;
 
-
     public Job() {}
 
     // Initialize the id and value fields.
